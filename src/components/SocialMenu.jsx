@@ -13,12 +13,11 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 
 export default function SocialMenu() {
     return (
-        <Box sx={{width: '100%', display: "flex", p: 2, alignItems: "center", justifyContent: "space-between"}}>
+        <Box sx={{maxWidth: 'xl', display: "flex", p: 2, alignItems: "center", justifyContent: "space-between"}}>
             <Typography variant="h6">
                 Do not forget to subscribe to our social media network and follow the news!
             </Typography>
-            <Box sx={{'& > :not(style)': {m: 1}}}>
-
+            <Box sx={{  '& > :not(style)': {m: 1}}}>
                 <Link href="https://telegram.org/">
                     <Fab color="primary" aria-label="telegram">
                         <TelegramIcon/>

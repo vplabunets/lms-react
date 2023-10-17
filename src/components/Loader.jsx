@@ -8,9 +8,6 @@ import Backdrop from '@mui/material/Backdrop';
 export default function Loader() {
     return (
         <Container>
-            {/*<Box sx={{display: 'flex'}}>*/}
-            {/*    <CircularProgress/>*/}
-            {/*</Box>*/}
             <Backdrop
                 sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
                 open={true}
@@ -18,7 +15,6 @@ export default function Loader() {
             >
                 <CircularProgress color="inherit"/>
             </Backdrop>
-
         </Container>
     );
 }

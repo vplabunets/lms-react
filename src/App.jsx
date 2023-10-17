@@ -1,47 +1,111 @@
-import React from "react";
+import React from 'react';
 import './App.css';
-import {Route, Routes} from "react-router";
-import {Layout} from "./components/Layout";
-import {PublicRoute} from "./components/PublicRoute";
-import {RegisterPage} from "./pages/RegisterPage";
-import {PrivateRoute} from "./components/PrivateRoute";
-import {Lessons} from "./pages/Lessons";
-import {LoginPage} from "./pages/LoginPage";
-import {NotFoundPage} from "./pages/NotFoundPage";
+import { Route, Routes } from 'react-router';
+import { PublicRoute } from './components/routes/PublicRoute';
+import { RegisterPage } from './pages/RegisterPage';
+import { PrivateRoute } from './components/routes/PrivateRoute';
+import { LoginPage } from './pages/LoginPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { Dashboard } from './components/Dashboard';
+import { Layout } from './components/Layout/Layout';
+import { TechnicalArticles } from './components/TechnicalArticles';
+import { Lessons } from './components/Lessons';
+import { Homeworks } from './components/Homeworks';
+import { TechnicalArticle } from './components/TechnicalArticle';
 
 function App() {
-    return <>
-        <Routes>
-            <Route index element={<LoginPage/>}/>
-            <Route
-                path="/register"
-                element={
-                    <PublicRoute component={RegisterPage} redirectTo="/lessons"/>
-                }
-            />
-            <Route
-                path="/login"
-                element={
-                    <PublicRoute component={LoginPage} redirectTo="/lessons"/>
-                }
-            />
-            <Route path="/" element={<Layout/>}>
-
+    return (
+        <>
+            <Routes>
                 <Route
-                    path="/lessons"
+                    path="/"
                     element={
-                        <PrivateRoute component={Lessons} redirectTo="/lessons"/>
+                        <PublicRoute
+                            redirectTo="/dashboard"
+                            component={LoginPage}
+                        />
                     }
                 />
-            </Route>
-            <Route path="/*" element={<NotFoundPage/>}/>
-        </Routes>
-    </>;
+
+                <Route
+                    path="/register"
+                    element={
+                        <PublicRoute
+                            redirectTo="/dashboard"
+                            component={RegisterPage}
+                        />
+                    }
+                />
+
+                <Route element={<Layout />}>
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <PrivateRoute
+                                component={Dashboard}
+                                redirectTo="/"
+                            />
+                        }
+                    />
+                    <Route
+                        path="/js/lessons"
+                        element={
+                            <PrivateRoute component={Lessons} redirectTo="/" />
+                        }
+                    />
+                    <Route
+                        path="/js/homeworks"
+                        element={
+                            <PrivateRoute
+                                component={Homeworks}
+                                redirectTo="/"
+                            />
+                        }
+                    />
+                    <Route
+                        path="/react/lessons"
+                        element={
+                            <PrivateRoute component={Lessons} redirectTo="/" />
+                        }
+                    />
+                    <Route
+                        path="/react/homeworks"
+                        element={
+                            <PrivateRoute
+                                component={Homeworks}
+                                redirectTo="/"
+                            />
+                        }
+                    />
+                    <Route
+                        path="/technical-articles"
+                        element={
+                            <PrivateRoute
+                                component={TechnicalArticles}
+                                redirectTo="/"
+                            />
+                        }
+                    />
+                    <Route
+                        path="/technical-articles/:category/:title"
+                        element={
+                            <PrivateRoute
+                                component={TechnicalArticle}
+                                redirectTo="/"
+                            />
+                        }
+                    />
+                </Route>
+
+                <Route path="/*" element={<NotFoundPage />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;
 // <Routes>
-//     <Route path="/" element={<Layout/>}>
+//     <Route path="/" element={<Layout1/>}>
 //         <Route index element={<HomePage/>}/>
 //         <Route
 //             path="/register"

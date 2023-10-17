@@ -1,16 +1,26 @@
-import React, {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux';
-import {selectIsLoggedIn, selectIsRefreshing, selectUser} from '../redux/auth/authSelectors';
-import {Button, Container, Grid, Paper, TextField, Typography} from '@mui/material';
-import authOperations from "../redux/auth/authOperations";
-import Loader from "../components/Loader";
-
+import React, { useState } from 'react';
+// import {useDispatch, useSelector} from 'react-redux';
+// import {selectIsLoggedIn, selectIsRefreshing, selectUser} from '../redux/auth/authSelectors';
+import {
+    Button,
+    Container,
+    Grid,
+    Paper,
+    TextField,
+    Typography,
+} from '@mui/material';
+import { useCreateUserMutation } from '../store/lmsBackApi/lmsBack';
+import { Link } from 'react-router-dom';
+import { setCredentials } from '../redux/auth/authSlice';
+import { useDispatch } from 'react-redux';
+// import Loader from "../components/Loader";
 export const RegisterPage = () => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const handleChange = ({target: {name, value}}) => {
+    const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
+    const handleChange = ({ target: { name, value } }) => {
         switch (name) {
             case 'name':
                 return setName(value);
@@ -22,35 +32,34 @@ export const RegisterPage = () => {
                 return;
         }
     };
-    const isLoggedIn = useSelector(selectIsLoggedIn);
-    const isRefreshing = useSelector(selectIsRefreshing);
-    const user = useSelector(selectUser);
-    const handleSubmit = e => {
+
+    const registerUserHandler = async e => {
         e.preventDefault();
         const form = e.currentTarget;
+        const requestData = await createUser({
+            name: form.elements.name.value,
+            email: form.elements.email.value,
+            type: 'student',
+            password: form.elements.password.value,
+        }).unwrap();
+        console.log(isCreating);
+        console.log('Register Page', requestData);
+        dispatch(setCredentials(requestData));
 
-        dispatch(
-            authOperations.register({
-                user: {
-                    name: form.elements.name.value,
-                    email: form.elements.email.value,
-                    password: form.elements.password.value,
-                }
-
-            })
-        );
-
+        setName('');
         setEmail('');
         setPassword('');
     };
 
-    return <>
-        {!isRefreshing ? (<Container maxWidth="sm" style={{marginTop: '100px'}}>
-                <Paper elevation={3} style={{padding: '20px'}}>
+    return (
+        <>
+            (
+            <Container maxWidth="sm" style={{ marginTop: '100px' }}>
+                <Paper elevation={3} style={{ padding: '20px' }}>
                     <Typography variant="h4" align="center" gutterBottom>
                         Registration
                     </Typography>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={registerUserHandler}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -87,18 +96,22 @@ export const RegisterPage = () => {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Button type="submit" variant="contained" color="primary" fullWidth>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                >
                                     SignUp
                                 </Button>
                             </Grid>
                         </Grid>
                     </form>
                 </Paper>
-                {isLoggedIn && user.email}
+                <Link to="/">To Login Page</Link>
+                {/*{isLoggedIn && user.email}*/}
                 {/*{isRefreshing && user.email}*/}
             </Container>
-        ) : <Loader/>
-        }</>
-
-}
-
+        </>
+    );
+};
