@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { lmsBackApi } from './lmsBackApi/lmsBack';
 import { authReducer } from '../redux/auth/authSlice';
 import storage from 'redux-persist/lib/storage';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 import {
     FLUSH,
@@ -18,7 +19,7 @@ import {
 const authPersistConfig = {
     key: 'auth',
     storage,
-    whitelist: ['token', 'user'],
+    whitelist: ['token', 'user', 'isLoggedin'],
 };
 export const store = configureStore({
     reducer: {
@@ -40,5 +41,7 @@ export const store = configureStore({
         }).concat(lmsBackApi.middleware),
     // devTools: process.env.NODE_ENV === 'development',
 });
+
+setupListeners(store.dispatch);
 
 export const persistor = persistStore(store);

@@ -26,6 +26,7 @@ const courses = {
         homeworks: 'HomeWorks',
     },
 };
+
 export const AsideList = ({ user }) => {
     const [openJS, setOpenJS] = React.useState(true);
     const [openReact, setOpenReact] = React.useState(false);
@@ -33,6 +34,7 @@ export const AsideList = ({ user }) => {
         setOpenJS(!openJS);
         setOpenReact(!openReact);
     };
+
     return (
         <>
             <List
@@ -75,6 +77,7 @@ export const AsideList = ({ user }) => {
                     <List component="div" disablePadding>
                         <NavLink
                             to="js/lessons"
+                            state={{ course: 'js' }}
                             style={{ textDecoration: 'none', color: 'inherit' }}
                         >
                             <ListItemButton sx={{ pl: 4 }}>
@@ -86,6 +89,7 @@ export const AsideList = ({ user }) => {
                         </NavLink>
                         <NavLink
                             to="js/homeworks"
+                            state={{ course: 'js' }}
                             style={{
                                 textDecoration: 'none',
                                 color: 'inherit',
@@ -104,9 +108,7 @@ export const AsideList = ({ user }) => {
             <Divider />
             <List
                 sx={{
-                    width: '100%',
                     maxWidth: 360,
-                    // bgcolor: 'background.paper',
                 }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
@@ -122,6 +124,7 @@ export const AsideList = ({ user }) => {
                     <List component="div" disablePadding>
                         <NavLink
                             to="react/lessons"
+                            state={{ course: 'react' }}
                             style={{ textDecoration: 'none', color: 'inherit' }}
                         >
                             <ListItemButton sx={{ pl: 4 }}>
@@ -133,6 +136,7 @@ export const AsideList = ({ user }) => {
                         </NavLink>
                         <NavLink
                             to="react/homeworks"
+                            state={{ course: 'react' }}
                             style={{ textDecoration: 'none', color: 'inherit' }}
                         >
                             <ListItemButton sx={{ pl: 4 }}>
@@ -169,8 +173,5 @@ export const AsideList = ({ user }) => {
 };
 
 AsideList.propTypes = {
-    user: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        userType: PropTypes.string.isRequired,
-    }).isRequired,
+    user: PropTypes.object.isRequired,
 };

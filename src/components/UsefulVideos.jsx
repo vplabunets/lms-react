@@ -6,17 +6,19 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Typography from '@mui/material/Typography';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import { useTheme } from '@mui/material/styles';
 const UsefulVideos = () => {
+    const theme = useTheme();
     var settings = {
         dots: true,
-        infinite: false,
+        infinite: true,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 4,
         initialSlide: 0,
         responsive: [
             {
-                breakpoint: 1024,
+                breakpoint: 1536,
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
@@ -25,9 +27,9 @@ const UsefulVideos = () => {
                 },
             },
             {
-                breakpoint: 600,
+                breakpoint: 1200,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: 1,
                     slidesToScroll: 2,
                     initialSlide: 2,
                 },
@@ -52,21 +54,23 @@ const UsefulVideos = () => {
 
     return (
         <Box
-            borderRadius={2}
+            borderRadius={1}
             sx={{
-                // width: '100%',
-                backgroundColor: 'primary.main',
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
                 flexDirection: 'column',
                 p: 4,
-                boxShadow:
-                    'inset 10px 10px 10px 3px rgba(0,0,0,0.1),inset 0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1)',
+                boxShadow: '0px 10px 15px -3px rgba(28,118,210,0.8)',
+                transition: 'box-shadow 10s ease-in-outs',
+                '&:hover': {
+                    boxShadow: theme.shadows[20],
+                },
             }}
         >
             <Box
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    // width: '100%',
                 }}
             >
                 <OndemandVideoIcon sx={{ width: '40px', height: '40px' }} />
@@ -75,24 +79,23 @@ const UsefulVideos = () => {
                 </Typography>
             </Box>
 
-            <Slider {...settings}>
+            <Slider
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+                {...settings}
+            >
                 {videoUrls.map((videoUrl, index) => (
-                    <Box
-                        sx={{
-                            // display: 'flex',
-                            // alignItems: 'center',
-                            maxWidth: '100px',
-                        }}
+                    <ReactPlayer
                         key={index}
-                    >
-                        <ReactPlayer
-                            url={videoUrl}
-                            controls
-                            height="250px"
-                            // width=""
-                            // height="auto"
-                        />
-                    </Box>
+                        url={videoUrl}
+                        controls
+                        height="250px"
+                        style={{
+                            width: '100%',
+                        }}
+                    />
                 ))}
             </Slider>
         </Box>

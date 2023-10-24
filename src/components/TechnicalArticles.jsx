@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { Button, Grid, Paper, Tooltip } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -18,18 +18,27 @@ import HtmlIcon from '@mui/icons-material/Html';
 import JavascriptIcon from '@mui/icons-material/Javascript';
 import { RiReactjsLine } from 'react-icons/ri';
 import { FaNodeJs } from 'react-icons/fa';
+import { useTheme } from '@mui/material/styles';
 
 export const TechnicalArticles = () => {
+    const { state } = useLocation();
+    const theme = useTheme();
     const { data, isLoading } = useGetArticlesQuery();
     const [articles, setArticles] = useState(null);
     const [categories, setCategories] = useState(null);
     const [activeCategory, setActiveCategory] = useState('all');
+
     useEffect(() => {
         if (data) {
             setArticles(data);
             setCategories(['all', ...getCategories(data)]);
         }
-    }, [data]);
+        if (state && data) {
+            setArticles(data);
+            handleCategoryFilter(state.category);
+        }
+    }, [data, state]);
+
     const addIcon = category => {
         switch (category) {
             case 'html':
@@ -69,18 +78,23 @@ export const TechnicalArticles = () => {
         <Loader />
     ) : (
         <Container
-            maxWidth="xl"
+            maxWidth="100vw"
             height="xl"
             sx={{ backgroundColor: 'transparent', width: '100%', p: 2 }}
         >
             <Box
-                borderRadius={2}
+                borderRadius={1}
+                pl={2}
                 sx={{
                     display: 'flex',
-                    backgroundColor: 'primary.light',
+                    color: theme.palette.primary.contrastText,
+                    backgroundColor: theme.palette.primary.main,
                     mb: 3,
-                    boxShadow:
-                        'inset 10px 10px 10px 3px rgba(0,0,0,0.1),inset 0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1),0px 10px 15px -3px rgba(0,0,0,0.1)',
+                    boxShadow: '0px 10px 15px -3px rgba(28,118,210,0.8)',
+                    transition: 'box-shadow 1s ease-in-outs',
+                    '&:hover': {
+                        boxShadow: theme.shadows[20],
+                    },
                 }}
             >
                 <Typography variant="h3" sx={{ p: 2 }}>
@@ -97,20 +111,27 @@ export const TechnicalArticles = () => {
                                         display: 'flex',
                                         flexDirection: 'column',
                                         height: '450px',
-                                        padding: '8px',
+                                        padding: '12px',
+                                        boxShadow: theme.shadows[20],
+                                        transition:
+                                            'box-shadow 10s ease-in-outs',
+                                        '&:hover': {
+                                            boxShadow:
+                                                '0px 10px 15px -3px rgba(28,118,210,0.8)',
+                                        },
                                     }}
                                 >
                                     <Box
                                         sx={{
                                             display: 'flex',
                                             justifyContent: 'space-between',
-                                            // flexGrow: '1 1 ',
+                                            height: '20px',
                                         }}
                                     >
                                         <Typography
                                             mb={2}
                                             sx={{ height: '25%' }}
-                                            variant="h5"
+                                            variant="h6"
                                             component="div"
                                         >
                                             {element.title}
@@ -144,7 +165,6 @@ export const TechnicalArticles = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'space-between',
-
                                             padding: '0 10px',
                                         }}
                                     >
@@ -189,11 +209,8 @@ export const TechnicalArticles = () => {
                         ))}
                 </Grid>
                 <Box
-                    // ml={4}
                     sx={{
                         position: 'relative',
-                        // backgroundColor: '#fff',
-                        // display: 'flex',
                         height: '500px',
                         flexDirection: 'column',
                         width: '25%',
@@ -204,7 +221,7 @@ export const TechnicalArticles = () => {
                         p={1}
                         sx={{
                             position: 'fixed',
-                            backgroundColor: '#fff',
+                            backgroundColor: theme.palette.background.default,
                             top: '190px',
                             display: 'flex',
                             height: '500px',
@@ -232,7 +249,7 @@ export const TechnicalArticles = () => {
                                             p={0}
                                             selected={
                                                 activeCategory === category
-                                            } // Делаем активную категорию выделенной
+                                            }
                                             onClick={() =>
                                                 handleCategoryFilter(category)
                                             }

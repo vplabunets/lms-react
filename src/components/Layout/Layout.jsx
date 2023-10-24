@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router';
+import { toggleFullscreen } from '../../utils/toggleFullscreen';
+import { logOut } from '../../redux/auth/authSlice';
+import { selectUser } from '../../redux/auth/authSelectors';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,19 +17,13 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { MdOutlineExitToApp, MdOutlineFullscreen } from 'react-icons/md';
 import { AppBar, Drawer, DrawerHeader } from './Layout.styled';
 import { AsideList } from './AsideList';
-import { toggleFullscreen } from '../../utils/toggleFullscreen';
-import { useDispatch } from 'react-redux';
-import { logOut } from '../../redux/auth/authSlice';
-import { selectUser } from '../../redux/auth/authSelectors';
 
 export function Layout() {
     const theme = useTheme();
-    console.log(theme);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    console.log('user in Layout', user);
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
     };
@@ -38,12 +35,21 @@ export function Layout() {
     const handleLogout = () => {
         dispatch(logOut());
     };
+
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box
+            sx={{
+                display: 'flex',
+            }}
+        >
             <AppBar position="fixed" open={openDrawer}>
-                <Toolbar>
+                <Toolbar
+                    sx={{
+                        backgroundColor: theme.palette.primary.dark,
+                        color: '#fff',
+                    }}
+                >
                     <IconButton
-                        color="inherit"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
@@ -52,18 +58,15 @@ export function Layout() {
                             ...(openDrawer && { display: 'none' }),
                         }}
                     >
-                        <MenuIcon />
+                        <MenuIcon
+                            sx={{ fill: theme.palette.primary.contrastText }}
+                        />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        style={{ flex: 10 }}
-                    >
+                    <Typography variant="h6" noWrap component="div" flex={10}>
                         {user.name}
                     </Typography>
                     <IconButton
-                        style={{ color: 'white' }}
+                        style={{ color: theme.palette.primary.contrastText }}
                         onClick={() =>
                             toggleFullscreen(isFullscreen, setIsFullscreen)
                         }
@@ -71,7 +74,7 @@ export function Layout() {
                         <MdOutlineFullscreen />
                     </IconButton>
                     <IconButton
-                        style={{ color: 'white' }}
+                        style={{ color: theme.palette.primary.contrastText }}
                         onClick={handleLogout}
                     >
                         <MdOutlineExitToApp />
@@ -93,23 +96,15 @@ export function Layout() {
             </Drawer>
             <Box
                 component="main"
-                maxWidth={'xl'}
                 sx={{
                     flexGrow: 1,
-                    bgcolor: 'text.disabled',
-                    height: '100%',
+                    backgroundColor: theme.palette.grey[50],
+                    maxWidth: '1800px',
+                    marginTop: '60px',
                 }}
             >
-                <DrawerHeader />
                 <Outlet />
             </Box>
         </Box>
     );
 }
-
-// Layout.propTypes = {
-//     user: PropTypes.shape({
-//         name: PropTypes.string.isRequired,
-//         email: PropTypes.string.isRequired,
-//     }).isRequired,
-// };

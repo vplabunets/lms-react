@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { createTheme } from '@mui/system';
 
-export const testTheme = createTheme({
+export const thisTheme = createTheme({
     breakpoints: {
         keys: ['xs', 'sm', 'md', 'lg', 'xl'],
         values: {
@@ -425,6 +425,7 @@ export const testTheme = createTheme({
             leavingScreen: 195,
         },
     },
+
     zIndex: {
         mobileStepper: 1000,
         fab: 1050,
