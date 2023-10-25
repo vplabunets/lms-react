@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-// import {useDispatch, useSelector} from 'react-redux';
-// import {selectIsLoggedIn, selectIsRefreshing, selectUser} from '../redux/auth/authSelectors';
 import {
     Button,
     Container,
@@ -9,7 +7,11 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useCreateUserMutation } from '../store/lmsBackApi/lmsBack';
+import {
+    useCreateUserMutation,
+    useGetHomeworksQuery,
+    useUpdateHomeworkMutation,
+} from '../store/lmsBackApi/lmsBack';
 import { Link } from 'react-router-dom';
 import { setCredentials } from '../redux/auth/authSlice';
 import { useDispatch } from 'react-redux';
@@ -20,6 +22,12 @@ export const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
+
+    // const[updateHomework, { isLoading: isUpdating }]=useUpdateHomeworkMutation()
+    const { data } = useGetHomeworksQuery();
+
+    const [updateHomeworkMutation] = useUpdateHomeworkMutation();
+
     const handleChange = ({ target: { name, value } }) => {
         switch (name) {
             case 'name':
@@ -45,7 +53,19 @@ export const RegisterPage = () => {
         console.log(isCreating);
         console.log('Register Page', requestData);
         dispatch(setCredentials(requestData));
-
+        if (data) {
+            data.map(homework => {
+                // console.log('homework', homework);
+                updateHomeworkMutation({
+                    _id: homework._id,
+                    body: {
+                        user: email,
+                        status: 'Not completed',
+                        grade: 0,
+                    },
+                });
+            });
+        }
         setName('');
         setEmail('');
         setPassword('');

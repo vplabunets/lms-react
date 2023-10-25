@@ -9,9 +9,34 @@ import UsefulVideos from './UsefulVideos';
 import { Container } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { LessonsList } from './LessonsList';
+// import {
+//     useGetHomeworksQuery,
+//     useUpdateHomeworkMutation,
+// } from '../store/lmsBackApi/lmsBack';
+// import { useSelector } from 'react-redux';
+// import { selectUser } from '../redux/auth/authSelectors';
 
 export const Dashboard = () => {
     const theme = useTheme();
+
+    // const [updateHomeworkMutation, { isLoading: isUpdating }] =
+    //     useUpdateHomeworkMutation();
+    // console.log(isUpdating);
+    // useEffect(() => {
+    //     if (data) {
+    //         data.map(homework => {
+    //             console.log(homework);
+    //             updateHomeworkMutation({
+    //                 _id: homework._id,
+    //                 body: {
+    //                     user: user.email,
+    //                     status: 'Not completed',
+    //                     grade: 0,
+    //                 },
+    //             });
+    //         });
+    //     }
+    // }, []);
     return (
         <Container
             maxWidth={'xl'}

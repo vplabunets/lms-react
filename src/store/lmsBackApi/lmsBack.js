@@ -133,10 +133,10 @@ export const lmsBackApi = createApi({
         }),
         updateHomework: builder.mutation({
             query: data => {
-                const { _id, ...body } = data;
+                const { _id, body } = data;
                 return {
                     url: `homeworks/${_id}`,
-                    method: 'PUT',
+                    method: 'PATCH',
                     body,
                 };
             },
